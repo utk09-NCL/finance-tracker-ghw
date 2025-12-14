@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styles from "./App.module.css";
 import Dashboard from "./components/dashboard/Dashboard";
-import Transactions from "./components/transactions/Transactions";
 import TransactionForm from "./components/transactions/TransactionForm";
+import TransactionsTable from "./components/transactions/TransactionsTable";
 
 type View = "dashboard" | "transactions" | "add";
 
@@ -42,8 +42,14 @@ function App() {
 
       <section className={styles.main}>
         {currentView === "dashboard" && <Dashboard />}
-        {currentView === "transactions" && <Transactions />}
-        {currentView === "add" && <TransactionForm />}
+        {currentView === "transactions" && <TransactionsTable />}
+        {currentView === "add" && (
+          <TransactionForm
+            onSuccess={() => {
+              alert("Transaction added successfully!");
+            }}
+          />
+        )}
       </section>
     </main>
   );

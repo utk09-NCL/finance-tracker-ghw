@@ -1,0 +1,265 @@
+.container {
+  width: 100%;
+  background: var(--background-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.filterToggle {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--primary-color);
+  background: var(--primary-color-light);
+  border: 1px solid var(--primary-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.filterToggle:hover {
+  background: var(--primary-color);
+  color: var(--background-primary);
+}
+
+.filters {
+  padding: var(--spacing-lg);
+  background: var(--background-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filterRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.filterLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.filterInput,
+.filterSelect {
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-color);
+  background: var(--background-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-base);
+}
+
+.filterInput:focus,
+.filterSelect:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color-light);
+}
+
+.clearFiltersButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.clearFiltersButton:hover {
+  background: var(--border-light);
+  border-color: var(--text-color-secondary);
+}
+
+.empty {
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--text-color-secondary);
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.table thead {
+  background: var(--background-secondary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.table th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-color);
+}
+
+.table tbody tr {
+  transition: var(--transition-base);
+}
+
+.table tbody tr:hover {
+  background: var(--background-secondary);
+}
+
+.projectedRow {
+  background: rgba(147, 197, 253, 0.05);
+}
+
+.projectedRow:hover {
+  background: rgba(147, 197, 253, 0.1) !important;
+}
+
+.description {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.incomeAmount {
+  color: var(--success-color);
+  font-weight: 600;
+}
+
+.expenseAmount {
+  color: var(--error-color);
+  font-weight: 600;
+}
+
+.incomeBadge,
+.expenseBadge,
+.projectedBadge,
+.actualBadge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.incomeBadge {
+  color: var(--success-color);
+  background: var(--success-color-light);
+}
+
+.expenseBadge {
+  color: var(--error-color);
+  background: var(--error-color-light);
+}
+
+.projectedBadge {
+  color: var(--info-color);
+  background: var(--info-color-light);
+}
+
+.actualBadge {
+  color: var(--text-color-secondary);
+  background: var(--border-light);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  justify-content: flex-start;
+}
+
+.editButton,
+.deleteButton {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-base);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.editButton:hover {
+  background: var(--info-color-light);
+  border-color: var(--info-color);
+}
+
+.deleteButton:hover {
+  background: var(--error-color-light);
+  border-color: var(--error-color);
+}
+
+.summary {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--background-secondary);
+  border-top: 1px solid var(--border-color);
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+}
+
+.summary strong {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .filterRow {
+    grid-template-columns: 1fr;
+  }
+
+  .tableWrapper {
+    border-radius: 0;
+  }
+
+  .table {
+    font-size: var(--font-size-xs);
+  }
+
+  .table th,
+  .table td {
+    padding: var(--spacing-sm);
+  }
+
+  .description {
+    max-width: 150px;
+  }
+}

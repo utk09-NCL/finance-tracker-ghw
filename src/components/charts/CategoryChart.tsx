@@ -30,6 +30,13 @@ function toIndexed(data: CategoryPoint[]): HistogramData[] {
   });
 }
 
+const timeToDateStr = (time: Time): string => {
+  if (typeof time === "string") return time;
+  if (typeof time === "number") return new Date(time * 1000).toISOString().split("T")[0];
+  const bd = time as { year: number; month: number; day: number };
+  return `${bd.year}-${String(bd.month).padStart(2, "0")}-${String(bd.day).padStart(2, "0")}`;
+};
+
 const CategoryChart = ({ height = 300, dataActual, dataProjected = [] }: Props) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
@@ -41,6 +48,7 @@ const CategoryChart = ({ height = 300, dataActual, dataProjected = [] }: Props) 
     const categoryMapShort = new Map<string, string>();
     const categoryMapFull = new Map<string, string>();
     const baseDate = new Date("2025-01-01");
+
     dataActual.forEach((d, idx) => {
       const date = new Date(baseDate);
       date.setDate(date.getDate() + idx);
@@ -49,13 +57,6 @@ const CategoryChart = ({ height = 300, dataActual, dataProjected = [] }: Props) 
       const shortName = d.category.length > 12 ? `${d.category.slice(0, 12)}…` : d.category;
       categoryMapShort.set(timeStr, shortName);
     });
-
-    const timeToDateStr = (time: Time): string => {
-      if (typeof time === "string") return time;
-      if (typeof time === "number") return new Date(time * 1000).toISOString().split("T")[0];
-      const bd = time as { year: number; month: number; day: number };
-      return `${bd.year}-${String(bd.month).padStart(2, "0")}-${String(bd.day).padStart(2, "0")}`;
-    };
 
     const chart = createChart(containerRef.current, {
       autoSize: true,

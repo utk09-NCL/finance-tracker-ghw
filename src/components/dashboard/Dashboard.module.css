@@ -47,6 +47,7 @@
 .currencySelector:focus {
   outline: none;
   border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .summaryCards {
@@ -94,6 +95,58 @@
 
 .cardSubtext {
   font-size: var(--font-size-xs);
+  color: var(--text-color-secondary);
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.chartCard {
+  padding: var(--spacing-lg);
+  background: var(--background-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.chartTitle {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.chartSubtitle {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+}
+
+.chartContainer {
+  width: 100%;
+  min-height: 300px;
+  position: relative;
+  z-index: var(--z-base);
+}
+
+.emptyState {
+  padding: var(--spacing-xl);
+  text-align: center;
+  background: var(--background-secondary);
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--border-color);
+}
+
+.emptyState h2 {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--text-color);
+}
+
+.emptyState p {
+  margin: 0;
   color: var(--text-color-secondary);
 }
 
