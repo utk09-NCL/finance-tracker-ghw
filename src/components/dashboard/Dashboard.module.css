@@ -48,3 +48,69 @@
   outline: none;
   border-color: var(--primary-color);
 }
+
+.summaryCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.card {
+  padding: var(--spacing-lg);
+  background: var(--background-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-base);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.cardLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-color-secondary);
+  margin-bottom: var(--spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardValue {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.cardValue.income {
+  color: var(--success-color);
+}
+
+.cardValue.expense {
+  color: var(--error-color);
+}
+
+.cardSubtext {
+  font-size: var(--font-size-xs);
+  color: var(--text-color-secondary);
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: var(--spacing-md);
+  }
+
+  .summaryCards {
+    grid-template-columns: 1fr;
+  }
+
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .chartContainer {
+    overflow-x: auto;
+  }
+}
