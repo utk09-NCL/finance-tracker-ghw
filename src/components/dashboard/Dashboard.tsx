@@ -6,6 +6,13 @@ import CategoryChart, { type CategoryPoint } from "../charts/CategoryChart";
 import { groupByMonth, groupByCategory } from "../../utils/aggregations";
 import styles from "./Dashboard.module.css";
 import TimeSeriesChart, { type TimePoint } from "../charts/TimeSeriesChart";
+import YearlyTrendsChart, { type YearPoint } from "../charts/YearlyTrendsChart";
+import {
+  generateAndSaveProjections,
+  loadHistoricalYearlyData,
+  type HistoricalYearlyData,
+  type ProjectionResult,
+} from "../../ml/projectedData";
 
 const Dashboard = () => {
   const [isHydrated, setIsHydrated] = useState(() => {
@@ -15,6 +22,10 @@ const Dashboard = () => {
       useCategoriesStore.persist.hasHydrated()
     );
   });
+  const [projections, setProjections] = useState<ProjectionResult | null>(null);
+  const [isGeneratingProjections, setIsGeneratingProjections] = useState(false);
+  const [projectionError, setProjectionError] = useState<string | null>(null);
+  const [historicalYearlyData, setHistoricalYearlyData] = useState<HistoricalYearlyData[]>([]);
 
   useEffect(() => {
     const unsubTransactions = useTransactionsStore.persist.onFinishHydration(() => {
@@ -130,6 +141,57 @@ const Dashboard = () => {
     value: c.projectedAmount,
   }));
 
+  const handleGenerateProjections = async () => {
+    setIsGeneratingProjections(true);
+    setProjectionError(null);
+
+    try {
+      const historical: HistoricalYearlyData[] = await loadHistoricalYearlyData(
+        activeCurrencyId.toUpperCase(),
+      );
+      setHistoricalYearlyData(historical);
+
+      const result = await generateAndSaveProjections(activeCurrencyId.toUpperCase());
+      setProjections(result);
+    } catch (error) {
+      console.error("Failed to generate projections:", error);
+      setProjectionError(error instanceof Error ? error.message : "Failed to generate projections");
+    } finally {
+      setIsGeneratingProjections(false);
+    }
+  };
+
+  const getProjectedYearlyData = (): YearPoint[] => {
+    if (!projections) return [];
+
+    const yearMap = new Map<string, { income: number; expenses: number }>();
+
+    for (const proj of projections.projections) {
+      const year = proj.monthKey.split("-")[0];
+      if (!yearMap.has(year)) {
+        yearMap.set(year, { income: 0, expenses: 0 });
+      }
+      const data = yearMap.get(year)!;
+      data.income += proj.projectedIncome;
+      data.expenses += proj.projectedExpenses;
+    }
+
+    return Array.from(yearMap.entries())
+      .map(([year, data]) => ({
+        year,
+        income: data.income,
+        expenses: data.expenses,
+      }))
+      .sort((a, b) => a.year.localeCompare(b.year));
+  };
+
+  const actualYearlyData: YearPoint[] = historicalYearlyData.map((d) => ({
+    year: d.year,
+    income: d.income,
+    expenses: d.expenses,
+  }));
+  const projectedYearlyData = getProjectedYearlyData();
+
   const totalIncome = actualIncome.reduce((sum, t) => sum + t.amount, 0);
   const totalExpenses = actualExpenses.reduce((sum, t) => sum + t.amount, 0);
   const netBalance = totalIncome - totalExpenses;
@@ -200,6 +262,54 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      <div className={styles.projectionSection}>
+        <button
+          onClick={() => void handleGenerateProjections()}
+          disabled={isGeneratingProjections}
+          className={styles.projectionButton}
+          style={{
+            padding: "12px 24px",
+            fontSize: "16px",
+            fontWeight: 600,
+            backgroundColor: isGeneratingProjections ? "#9ca3af" : "#3b82f6",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: isGeneratingProjections ? "not-allowed" : "pointer",
+            marginBottom: "16px",
+          }}
+        >
+          {isGeneratingProjections ? "Generating Projections..." : "Generate Projected Earnings"}
+        </button>
+
+        {projectionError && (
+          <div style={{ color: "#ef4444", marginBottom: "16px" }}>Error: {projectionError}</div>
+        )}
+
+        {projections && !isGeneratingProjections && (
+          <div style={{ marginBottom: "16px", color: "#6b7280" }}>
+            Last updated: {new Date(projections.trainingDate).toLocaleString()} • Based on{" "}
+            {projections.historicalMonths} months of data
+          </div>
+        )}
+      </div>
+
+      {actualYearlyData.length > 0 && (
+        <div className={styles.chartCard} style={{ marginBottom: "24px" }}>
+          <h3 className={styles.chartTitle}>Yearly Trends</h3>
+          <p className={styles.chartSubtitle}>
+            Total income and expenses per year (historical + projected)
+          </p>
+          <div className={styles.chartContainer}>
+            <YearlyTrendsChart
+              height={300}
+              actualData={actualYearlyData}
+              projectedData={projectedYearlyData}
+            />
+          </div>
+        </div>
+      )}
 
       <div className={styles.chartsGrid}>
         <div className={styles.chartCard}>
