@@ -4,6 +4,8 @@ import { useAccountsStore } from "../../store/accountsStore";
 import { useCategoriesStore } from "../../store/categoriesStore";
 import type { TransactionType, AnyTransaction, ProjectedTransaction } from "../../types/models";
 import styles from "./TransactionForm.module.css";
+import { generateAndSaveDemoModelToIndexedDB } from "../../ml/generateAndSaveDemoModelToIndexedDB";
+import { suggestCategory } from "../../ml/categorizer";
 
 type Props = {
   editingTransaction?: AnyTransaction;
@@ -37,8 +39,8 @@ const TransactionForm = ({ editingTransaction, onCancel, onSuccess }: Props) => 
   });
 
   const [selectedParentCategory, setSelectedParentCategory] = useState<string>("");
-  const [isSuggesting, _setIsSuggesting] = useState(false);
-  const [isGeneratingModel, _setIsGeneratingModel] = useState(false);
+  const [isSuggesting, setIsSuggesting] = useState(false);
+  const [isGeneratingModel, setIsGeneratingModel] = useState(false);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -62,6 +64,53 @@ const TransactionForm = ({ editingTransaction, onCancel, onSuccess }: Props) => 
     const parentId = e.target.value;
     setSelectedParentCategory(parentId);
     setFormData((prev) => ({ ...prev, categoryId: "" }));
+  };
+
+  const handleSuggestCategory = async () => {
+    if (formData.description === "" || formData.description.trim() === "") return;
+
+    try {
+      setIsSuggesting(true);
+
+      const catId = await suggestCategory(formData.description);
+
+      if (catId === "") {
+        alert("No suggestion available. Try a more descriptive text.");
+        return;
+      }
+
+      const cat = getCategoryById(catId);
+      if (!cat) {
+        setFormData((prev) => ({ ...prev, categoryId: catId }));
+        return;
+      }
+
+      if (cat.parentId && cat.parentId !== "") {
+        setSelectedParentCategory(cat.parentId);
+        setFormData((prev) => ({ ...prev, categoryId: cat.id }));
+      } else {
+        setSelectedParentCategory(cat.id);
+        setFormData((prev) => ({ ...prev, categoryId: cat.id }));
+      }
+    } catch (e) {
+      console.error(e);
+      alert("AI suggestion failed. Falling back to manual selection.");
+    } finally {
+      setIsSuggesting(false);
+    }
+  };
+
+  const handleGenerateDemoModel = async () => {
+    try {
+      setIsGeneratingModel(true);
+      await generateAndSaveDemoModelToIndexedDB();
+      alert("Seed-trained AI model saved to IndexedDB. You can now use Suggest Category.");
+    } catch (e) {
+      console.error(e);
+      alert("Failed to train model. See console for details.");
+    } finally {
+      setIsGeneratingModel(false);
+    }
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -344,6 +393,9 @@ const TransactionForm = ({ editingTransaction, onCancel, onSuccess }: Props) => 
         <button
           type="button"
           className={styles.suggestButton}
+          onClick={() => {
+            void handleSuggestCategory();
+          }}
           disabled={isSuggesting || formData.description.trim() === ""}
           title={isSuggesting ? "Suggesting..." : "Use AI to suggest a category"}
         >
@@ -353,6 +405,9 @@ const TransactionForm = ({ editingTransaction, onCancel, onSuccess }: Props) => 
           type="button"
           className={styles.demoModelButton}
           disabled={isGeneratingModel}
+          onClick={() => {
+            void handleGenerateDemoModel();
+          }}
           title="Generate a tiny demo model in your browser"
         >
           {isGeneratingModel ? "⚙️ Building demo model..." : "⚙️ Create Demo AI Model"}

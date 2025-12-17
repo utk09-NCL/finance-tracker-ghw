@@ -1,7 +1,7 @@
 import * as tf from "@tensorflow/tfjs";
-import { seedProjectedTransactions, seedTransactions } from "../data/seedData";
+import { seedTransactionsAll } from "../data/seedData";
 
-const DEMO_LABELS: string[] = [
+export const DEMO_LABELS: string[] = [
   "exp-groceries-tesco",
   "exp-groceries-sainsburys",
   "exp-subscriptions-ai",
@@ -15,7 +15,7 @@ const DEMO_LABELS: string[] = [
   "exp-dining",
 ];
 
-const DEMO_VOCAB: string[] = [
+export const DEMO_VOCAB: string[] = [
   "salary",
   "bonus",
   "rent",
@@ -49,7 +49,7 @@ const VOCAB_LENGTH = DEMO_VOCAB.length;
 
 // input: Groceries at tesco, £45.50
 // output: ["groceries", "at", "tesco", "45", "50"]
-function preprocess(text: string): string[] {
+export function preprocess(text: string): string[] {
   return text
     .toLowerCase()
     .replace(/[^a-z0-9\s]/g, " ")
@@ -81,9 +81,12 @@ function labelIndex(categoryId: string): number | null {
 }
 
 export async function generateAndSaveDemoModelToIndexedDB(): Promise<void> {
-  const examples = [...seedTransactions, ...seedProjectedTransactions];
+  const examples = [...seedTransactionsAll];
+  console.debug(examples.length);
 
   const filtered = examples.filter((t) => labelIndex(t.category) !== null);
+
+  console.debug(filtered.length);
 
   if (filtered.length === 0) {
     throw new Error("No valid examples found for demo model.");
@@ -111,8 +114,79 @@ export async function generateAndSaveDemoModelToIndexedDB(): Promise<void> {
   model.add(
     tf.layers.dense({
       inputShape: [VOCAB_LENGTH], // [0, 1, 0, 1, 0, .... 0] // 20
-      units: 32, // number of neurons
+      units: 24, // number of neurons
       activation: "relu",
     }),
   );
+
+  model.add(
+    tf.layers.dense({
+      units: DEMO_LABELS.length, // number of classes
+      activation: "softmax",
+    }),
+  );
+
+  model.compile({
+    optimizer: tf.train.adam(0.01),
+    loss: "categoricalCrossentropy",
+    metrics: ["accuracy"],
+  });
+
+  await model.fit(xTensor, yTensor, {
+    epochs: 30,
+    batchSize: Math.min(16, xsTrain.length),
+    shuffle: true,
+    verbose: 1,
+  });
+
+  if (testSize > 0) {
+    const xTestTensor = tf.tensor2d(xsTest, [xsTest.length, VOCAB_LENGTH]);
+    const preds = model.predict(xTestTensor) as tf.Tensor;
+    const probs = (await preds.array()) as number[][];
+    preds.dispose();
+    xTestTensor.dispose();
+
+    let correct = 0;
+    const perClass: Record<string, { tp: number; total: number }> = {};
+    for (let i = 0; i < DEMO_LABELS.length; i++) {
+      perClass[DEMO_LABELS[i]] = { tp: 0, total: 0 };
+    }
+
+    for (let i = 0; i < probs.length; i++) {
+      const p = probs[i];
+      let bestIdx = 0;
+      let bestVal = -Infinity;
+      for (let j = 0; j < p.length; j++) {
+        if (p[j] > bestVal) {
+          bestVal = p[j];
+          bestIdx = j;
+        }
+      }
+
+      const gold = ysTest[i];
+      const goldLabel = DEMO_LABELS[gold];
+      perClass[goldLabel].total += 1;
+      if (bestIdx === gold) {
+        correct += 1;
+        perClass[goldLabel].tp += 1;
+      }
+    }
+
+    const accuracy = correct / probs.length;
+    console.debug(
+      "[Demo Model] Test accuracy:",
+      JSON.stringify({ correct, total: probs.length, accuracy }),
+    );
+    console.debug(
+      "[Demo Model] Per-class hits (tp=true positives, total=test samples per class):",
+      perClass,
+    );
+  }
+
+  await model.save("indexeddb://transaction-categorizer");
+
+  xTensor.dispose();
+  yTensor.dispose();
+  model.dispose();
+  console.debug("[Demo Model] Saved to IndexedDB under 'transaction-categorizer'.");
 }

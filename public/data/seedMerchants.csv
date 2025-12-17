@@ -1,0 +1,65 @@
+merchantId,merchantName,mcc,defaultCategory,homeCountry,keywords,recurringLikelihood,typicalEssentiality
+m_tesco,Tesco,5411,groceries,UK,"tesco,tesco stores,tesco plc,clubcard",0.0,essential
+m_sainsbury,Sainsbury's,5411,groceries,UK,"sainsbury,sainsburys,nectar",0.0,essential
+m_asda,ASDA,5411,groceries,UK,"asda,asda superstore",0.0,essential
+m_aldi,ALDI,5411,groceries,DE,"aldi,aldi stores",0.0,essential
+m_lidl,Lidl,5411,groceries,DE,"lidl,lidl uk",0.0,essential
+m_mands,Marks & Spencer,5411,groceries,UK,"marks and spencer,m&s,marks spencer",0.0,essential
+m_waitrose,Waitrose,5411,groceries,UK,"waitrose,john lewis partnership",0.0,essential
+m_costco,Costco,5300,groceries,US,"costco,wholesale",0.0,essential
+m_amazon,Amazon,5942,shopping,US,"amazon,amzn,amazon marketplace,prime",0.0,discretionary
+m_ebay,eBay,5968,shopping,US,"ebay,ebay uk,paypal",0.0,discretionary
+m_argos,Argos,5311,shopping,UK,"argos,argos ltd",0.0,discretionary
+m_johnlewis,John Lewis,5311,shopping,UK,"john lewis,jl",0.0,discretionary
+m_ikea,IKEA,5712,shopping,SE,"ikea,ikea uk",0.0,discretionary
+m_primark,Primark,5651,shopping,IE,"primark,penneys",0.0,discretionary
+m_hm,H&M,5651,shopping,SE,"h&m,hm",0.0,discretionary
+m_zara,Zara,5651,shopping,ES,"zara,inditex",0.0,discretionary
+m_starbucks,Starbucks,5814,coffee,US,"starbucks,sbucks",0.0,discretionary
+m_costa,Costa Coffee,5814,coffee,UK,"costa,costa coffee",0.0,discretionary
+m_pret,Pret A Manger,5814,lunch,UK,"pret,pret a manger",0.0,discretionary
+m_nero,Caffè Nero,5814,coffee,UK,"nero,caffe nero",0.0,discretionary
+m_mcd,McDonald's,5814,dining,US,"mcdonalds,mc donalds,mcd",0.0,discretionary
+m_kfc,KFC,5814,dining,US,"kfc,kentucky fried chicken",0.0,discretionary
+m_wagamama,Wagamama,5812,dining,UK,wagamama,0.0,discretionary
+m_nandos,Nando's,5812,dining,UK,"nandos,nando's",0.0,discretionary
+m_deliveroo,Deliveroo,5814,dining,UK,deliveroo,0.0,discretionary
+m_ubereats,Uber Eats,5814,dining,US,"uber eats,ubereats",0.0,discretionary
+m_uber,Uber,4121,transport,US,uber,0.0,essential
+m_bolt,Bolt,4121,transport,EE,bolt,0.0,essential
+m_tfl,Transport for London,4111,transport,UK,"tfl,transport for london,oyster",0.0,essential
+m_nationalrail,National Rail,4112,transport,UK,national rail,0.0,essential
+m_trainline,Trainline,4112,transport,UK,trainline,0.0,essential
+m_shell,Shell,5541,transport,NL,shell,0.0,essential
+m_bp,BP,5541,transport,UK,"bp,british petroleum",0.0,essential
+m_easyjet,easyJet,4511,travel,UK,easyjet,0.0,discretionary
+m_ryanair,Ryanair,4511,travel,IE,ryanair,0.0,discretionary
+m_ba,British Airways,4511,travel,UK,"british airways,ba",0.0,discretionary
+m_airbnb,Airbnb,7011,travel,US,airbnb,0.0,discretionary
+m_booking,Booking.com,7011,travel,NL,"booking,booking.com",0.0,discretionary
+m_britishgas,British Gas,4900,utilities,UK,british gas,1.0,essential
+m_octopus,Octopus Energy,4900,utilities,UK,"octopus,octopus energy",1.0,essential
+m_thameswater,Thames Water,4900,utilities,UK,thames water,1.0,essential
+m_virginmedia,Virgin Media,4814,internet,UK,virgin media,1.0,essential
+m_bt,BT,4814,internet,UK,"bt,british telecom",1.0,essential
+m_sky,Sky,4899,subscriptions,UK,sky,1.0,discretionary
+m_vodafone,Vodafone,4814,mobile,UK,vodafone,1.0,essential
+m_ee,EE,4814,mobile,UK,ee,1.0,essential
+m_o2,O2,4814,mobile,UK,"o2,telefonica",1.0,essential
+m_spotify,Spotify,4899,subscriptions,SE,spotify,1.0,discretionary
+m_netflix,Netflix,4899,subscriptions,US,netflix,1.0,discretionary
+m_disney,Disney+,4899,subscriptions,US,"disney plus,disney+",1.0,discretionary
+m_youtube,YouTube Premium,4899,subscriptions,US,"youtube premium,youtube",1.0,discretionary
+m_gym,Gym Membership,7997,subscriptions,UK,"gym,puregym,the gym group,fitness",1.0,discretionary
+m_adobe,Adobe,5734,subscriptions,US,"adobe,creative cloud",1.0,discretionary
+m_microsoft,Microsoft,5734,subscriptions,US,"microsoft,msft,office 365",1.0,discretionary
+m_google,Google,5734,subscriptions,US,"google,google one,google services",1.0,discretionary
+m_boots,Boots,5912,health,UK,boots,0.0,essential
+m_superdrug,Superdrug,5912,health,UK,superdrug,0.0,essential
+m_nhs,NHS,8099,health,UK,nhs,0.0,essential
+m_cineworld,Cineworld,7832,entertainment,UK,cineworld,0.0,discretionary
+m_ticketmaster,Ticketmaster,7922,entertainment,US,ticketmaster,0.0,discretionary
+m_employer,Employer Payroll,0000,salary,UK,"payroll,salary,employer",1.0,income
+m_freelance_platform,Freelance Platform,0000,freelance,US,"freelance,upwork,fiverr,contract",0.0,income
+m_invest_platform,Investment Platform,0000,investments,UK,"dividend,interest,broker,investment",0.0,income
+m_landlord,Landlord / Letting Agent,6513,rent,UK,"rent,landlord,letting,property management",1.0,essential
